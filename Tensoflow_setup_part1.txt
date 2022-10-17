@@ -1,0 +1,65 @@
+TensorFlow Object Detection
+===========================
+1. Download the template -- into local system
+	- https://drive.google.com/drive/folders/16vN-t0nMhQUWzbBXILHP6NSmAu0-_n2a?usp=sharing
+2. setup the local env
+	- conda create -n tensorflow_od python=3.8 -y
+3. switch to tensorflow_od env and install below package
+	1. pandas
+	2. jupyter
+	3. tensorflow
+	4. pillow
+	5. tensorflow-object-detection-api
+	6. pip install labelImg
+	
+4. Move to Tensorflow\workspace\images\images
+	paste your image dataset
+5. Cut first 600 images and paste to train
+6. paste remaining images to test
+7. Under workspace dir ---> place below files
+	
+	generate_labelmap.py
+	generate_tfrecord.py
+	xml_to_csv.py
+	
+8. Create file name called class-names.txt within image folder and paste your classes names
+	with_mask
+	without_mask
+	mask_weared_incorrect
+
+9. move to Workspace dir from terminal using cd command
+10. execute python xml_to_csv.py
+	it will create 2 csv file under image folder
+11. execute python generate_labelmap.py
+	it will create labelmap.pbtxt under image folder, this file is created using class-names.txt file
+
+12.  Generate tfrecord file for training by this command 
+	python generate_tfrecord.py --csv_input=images/train_labels.csv --image_dir=images/train --output_path=images/train.record
+13. Generate tfrecord file for test by this command
+	python generate_tfrecord.py --csv_input=images/test_labels.csv --image_dir=images/test --output_path=images/test.record
+
+14. move to https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md tensorflow zoo
+
+15. Download the https://github.com/tensorflow/models folder 
+16. Unzip and get into the model-master folder then get into research folder and copy object_detection folder.
+17. Paste the object_detection folder in Workspace folder
+18. get into object_detection folder and copy model_main_tf2.py
+19. paste model_main_tf2.py in workspace folder
+20. navigate to model folder under the workspace and get into my_ssd_mobnet(you can give what ever name as you like). and edit the pipline.config
+21. within pipline.config :
+	line number 3: num_classes: 3
+			  135: batch_size: 4
+			  165: fine_tune_checkpoint: "pre-trained-models/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/checkpoint/ckpt-0"
+			  171: fine_tune_checkpoint_type: "detection"
+			  175: label_map_path: "images/labelmap.pbtxt"
+			  177: input_path: "images/train.record"
+			  185: label_map_path: "images/labelmap.pbtxt"
+			  189: input_path: "images/test.record"
+
+22. Upload the entire RealTimeObjectDetection-main folder into Google drive.
+23. once the RealTimeObjectDetection-main folder is uploaded. Create a new python notebook with the RealTimeObjectDetection-main folder.
+24. named it as Mask-detection.ipynb
+25. execute the Mask-detection.ipynb
+26. once its successful copy the inference_graph folder from workspace.
+27. move inference_graph folder into object_detection folder within workspace directory in your local machine.
+  
